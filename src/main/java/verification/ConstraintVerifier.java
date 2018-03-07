@@ -39,14 +39,36 @@ public class ConstraintVerifier {
 	 */
 	public ConstraintVerifier(Set<Object> activatedVariables, Set<Object> deactivatedVariables,
 			Set<Constraint> prevailingConstraints) {
-		this.constraints = new HashSet<>();
-		constraints.addAll(prevailingConstraints);
+		this.constraints = new HashSet<>(prevailingConstraints);
 		for (Object activatedVariable : activatedVariables) {
 			constraints.add(ConstraintGeneration.activateVariable(activatedVariable));
 		}
 		for (Object deactivatedVariable : deactivatedVariables) {
 			constraints.add(ConstraintGeneration.deactivateVariable(deactivatedVariable));
 		}
+		assertTrue("Basic constraint set already unsolvable.", areConstraintsSolvable(constraints));
+	}
+	
+	/**
+	 * Check whether the given constraint set is solvable.
+	 * 
+	 * @param constraints
+	 * @return TRUE is solvable, FALSE otherwise
+	 */
+	protected boolean areConstraintsSolvable(Set<Constraint> constraints) {
+		Solver solver = new DefaultSolver();
+		for(Constraint c : constraints) {
+			solver.addConstraint(c);
+		}
+		boolean solvable = true;
+		try {
+			solver.solve(new VarOrder());
+		}catch(TimeoutException timeout) {
+			fail("timeout");
+		}catch(ContradictionException contradiction) {
+			solvable = false;
+		}
+		return solvable;
 	}
 
 	/**
@@ -110,7 +132,9 @@ public class ConstraintVerifier {
 		} catch (ContradictionException contradiction) {
 			contradictionSeen = true;
 		}
-		assertEquals(contradictionExpected, contradictionSeen);
+		String failedTestMessage = "Setting the variable " + variable + " to " + (active ? "1" : "0") + " "
+				+ (contradictionExpected ? " does not cause " : " causes ") + "a contradiction. ";
+		assertEquals(failedTestMessage, contradictionExpected, contradictionSeen);
 	}
 
 }
