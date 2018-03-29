@@ -48,7 +48,7 @@ public class ConstraintVerifier {
 		}
 		assertTrue("Basic constraint set already unsolvable.", areConstraintsSolvable(constraints));
 	}
-	
+
 	/**
 	 * Check whether the given constraint set is solvable.
 	 * 
@@ -57,15 +57,15 @@ public class ConstraintVerifier {
 	 */
 	protected boolean areConstraintsSolvable(Set<Constraint> constraints) {
 		Solver solver = new DefaultSolver();
-		for(Constraint c : constraints) {
+		for (Constraint c : constraints) {
 			solver.addConstraint(c);
 		}
 		boolean solvable = true;
 		try {
 			solver.solve(new VarOrder());
-		}catch(TimeoutException timeout) {
+		} catch (TimeoutException timeout) {
 			fail("timeout");
-		}catch(ContradictionException contradiction) {
+		} catch (ContradictionException contradiction) {
 			solvable = false;
 		}
 		return solvable;
@@ -104,6 +104,17 @@ public class ConstraintVerifier {
 	protected void verifyVariableValue(Object variable, boolean active) {
 		checkForContradiction(variable, active, false);
 		checkForContradiction(variable, !active, true);
+	}
+
+	/**
+	 * Verifies that the input variables can be set to both 0 and 1 without causing
+	 * a contradiction under the current circumstances.
+	 * 
+	 * @param variable the input variable
+	 */
+	public void verifyVariableNotFixed(Object variable) {
+		checkForContradiction(variable, true, false);
+		checkForContradiction(variable, false, false);
 	}
 
 	/**
