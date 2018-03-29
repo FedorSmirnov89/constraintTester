@@ -8,13 +8,9 @@ import org.opt4j.satdecoding.Constraint.Operator;
 
 public class ConstraintGenerationTest {
 
-	class MockVariable extends Object {
-
-	}
-
 	@Test
 	public void test() {
-		MockVariable var = new MockVariable();
+		Object var = new Object();
 
 		Constraint set1 = ConstraintGeneration.activateVariable(var);
 		assertEquals(Operator.EQ,set1.getOperator());
