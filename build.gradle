@@ -1,3 +1,8 @@
+  
+plugins {
+	id 'com.github.kt3k.coveralls' version '2.6.3'
+ }
+  
   apply plugin: 'java'
   apply plugin: 'application'
   apply plugin: 'eclipse'
@@ -42,15 +47,15 @@
 	  }
   }
   
- coveralls {
-	sourceDirs = sourceSets.main.allSource.srcDirs.flatten()
-	jacocoReportPath = "${buildDir}/reports/jacoco/jacocoRootReport/jacocoRootReport.xml"
-}
+// coveralls {
+//	sourceDirs = sourceSets.main.allSource.srcDirs.flatten()
+//	jacocoReportPath = "${buildDir}/reports/jacoco/jacocoRootReport/jacocoRootReport.xml"
+//}
 
 tasks.coveralls {
   group = 'Documentation'
   description = 'Uploads the aggregated coverage report to Coveralls'
 
-  dependsOn jacocoRootReport
+  dependsOn jacocoTestReport
   onlyIf { System.env.'CI' && !JavaVersion.current().isJava9Compatible() }
 }
