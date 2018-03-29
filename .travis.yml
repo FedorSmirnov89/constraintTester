@@ -1,4 +1,8 @@
 language: java
+install: true
+dist: trusty
+after_success:
+- "./gradle coveralls"
 
 deploy:
   provider: pages

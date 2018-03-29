@@ -1,6 +1,7 @@
+  
 plugins {
-	id "org.sonarqube" version "2.5"
-  }
+	id 'com.github.kt3k.coveralls' version '2.6.3'
+ }
   
   apply plugin: 'java'
   apply plugin: 'application'
@@ -22,16 +23,6 @@ plugins {
   sourceCompatibility = 1.8
   targetCompatibility = 1.8
   
-  sonarqube {
-	  properties {
-		  property "sonar.projectName", "Constraint tester"
-		  property "sonar.projectKey", "constraint-tester"
-		  property "sonar.java.coveragePlugin", "jacoco"
-		  /* Is this actually the right path?! */
-		  property "sonar.jacoco.reportPath", "build/reports/jacoco/test.exec"
-	  }
-  }
-  
   dependencies {
 	  compile group: 'junit', 		name: 'junit', 					version: '4.+'  
 	  compile 'com.github.felixreimann:opt4j:493dc6493f'
@@ -40,6 +31,8 @@ plugins {
   task wrapper(type: Wrapper) {
 	  gradleVersion = '3.5'
   }
+  
+
   
   eclipse {
 	  classpath {
@@ -50,5 +43,19 @@ plugins {
   jacocoTestReport {
 	  reports {
 		  html.enabled = true
+		  xml.enabled = true
 	  }
   }
+  
+// coveralls {
+//	sourceDirs = sourceSets.main.allSource.srcDirs.flatten()
+//	jacocoReportPath = "${buildDir}/reports/jacoco/jacocoRootReport/jacocoRootReport.xml"
+//}
+
+tasks.coveralls {
+  group = 'Documentation'
+  description = 'Uploads the aggregated coverage report to Coveralls'
+
+  dependsOn jacocoTestReport
+  onlyIf { System.env.'CI' && !JavaVersion.current().isJava9Compatible() }
+}
