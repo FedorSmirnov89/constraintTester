@@ -10,13 +10,9 @@ import org.opt4j.satdecoding.Constraint;
 
 public class ConstraintVerifierTest {
 
-	class MockVariable extends Object {
-
-	}
-
 	@Test
 	public void testVariableNotFixed() {
-		MockVariable var = new MockVariable();
+		Object var = new Object();
 		Set<Constraint> constraints = new HashSet<>();
 		boolean assertionError = false;
 		try {
@@ -49,7 +45,7 @@ public class ConstraintVerifierTest {
 
 	@Test
 	public void testUnsolvableConstraints() {
-		MockVariable var = new MockVariable();
+		Object var = new Object();
 		Set<Constraint> constraints = new HashSet<>();
 		constraints.add(ConstraintGeneration.activateVariable(var));
 
@@ -76,8 +72,8 @@ public class ConstraintVerifierTest {
 
 	@Test
 	public void testVariableVerification() {
-		MockVariable active = new MockVariable();
-		MockVariable notActive = new MockVariable();
+		Object active = new Object();
+		Object notActive = new Object();
 		Set<Object> activeVars = new HashSet<>();
 		Set<Object> unactiveVars = new HashSet<>();
 		activeVars.add(active);
@@ -121,7 +117,7 @@ public class ConstraintVerifierTest {
 
 	@Test
 	public void testContradictionCheck() {
-		MockVariable var = new MockVariable();
+		Object var = new Object();
 		Constraint active = ConstraintGeneration.activateVariable(var);
 		Set<Constraint> constraints = new HashSet<>();
 		constraints.add(active);
