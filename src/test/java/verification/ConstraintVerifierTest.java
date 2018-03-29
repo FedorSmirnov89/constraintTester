@@ -10,6 +10,7 @@ import org.opt4j.satdecoding.Constraint;
 
 public class ConstraintVerifierTest {
 
+	@Test
 	public void testVariableNotFixed() {
 		Object var = new Object();
 		Set<Constraint> constraints = new HashSet<>();
@@ -42,6 +43,7 @@ public class ConstraintVerifierTest {
 		}
 	}
 
+	@Test
 	public void testUnsolvableConstraints() {
 		Object var = new Object();
 		Set<Constraint> constraints = new HashSet<>();

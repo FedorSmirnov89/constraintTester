@@ -8,6 +8,7 @@ import org.opt4j.satdecoding.Constraint.Operator;
 
 public class ConstraintGenerationTest {
 
+	@Test
 	public void test() {
 		Object var = new Object();
 
