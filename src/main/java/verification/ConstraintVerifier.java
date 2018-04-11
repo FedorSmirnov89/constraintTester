@@ -72,10 +72,25 @@ public class ConstraintVerifier {
 	}
 
 	/**
+	 * Verify that at least one of the given variable objects is active with the
+	 * underlying constraint set.
+	 * 
+	 * @param variables
+	 *            the set of the variables where at least one has to be active
+	 */
+	public void verifyAtLeastOneActive(Set<Object> variables) {
+		for (Object var : variables) {
+			constraints.add(ConstraintGeneration.deactivateVariable(var));
+		}
+		String message = "The constraints are solvable although all the variables " + variables.toString() + "are deactivated, the constraint set remains solvable.";
+		assertFalse(message, areConstraintsSolvable(constraints));
+	}
+
+	/**
 	 * Verify that the constraint set forces the given variable to 0.
 	 * 
 	 * @param variable
-	 *            : the variable to verify.
+	 *            the variable to verify.
 	 */
 	public void verifyVariableDeactivated(Object variable) {
 		verifyVariableValue(variable, false);
@@ -110,7 +125,8 @@ public class ConstraintVerifier {
 	 * Verifies that the input variables can be set to both 0 and 1 without causing
 	 * a contradiction under the current circumstances.
 	 * 
-	 * @param variable the input variable
+	 * @param variable
+	 *            the input variable
 	 */
 	public void verifyVariableNotFixed(Object variable) {
 		checkForContradiction(variable, true, false);
@@ -147,5 +163,4 @@ public class ConstraintVerifier {
 				+ (contradictionExpected ? " does not cause " : " causes ") + "a contradiction. ";
 		assertEquals(failedTestMessage, contradictionExpected, contradictionSeen);
 	}
-
 }

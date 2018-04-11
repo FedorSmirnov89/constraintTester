@@ -11,6 +11,54 @@ import org.opt4j.satdecoding.Constraint;
 public class ConstraintVerifierTest {
 
 	@Test
+	public void testVerifyAtLeastOneActive() {
+		Object var1 = new Object();
+		Object var2 = new Object();
+		Set<Object> vars = new HashSet<>();
+		vars.add(var1);
+		vars.add(var2);
+		boolean assertionError = false;
+		try {
+			ConstraintVerifier verifyActivation = new ConstraintVerifier(new HashSet<>(), new HashSet<>(), new HashSet<>());
+			verifyActivation.verifyAtLeastOneActive(vars);
+		}catch(AssertionError error) {
+			assertionError = true;
+		}
+		assertTrue(assertionError);
+		assertionError = false;
+		try {
+			Set<Object> active = new HashSet<>();
+			active.add(var1);
+			ConstraintVerifier verifyActivation = new ConstraintVerifier(active, new HashSet<>(), new HashSet<>());
+			verifyActivation.verifyAtLeastOneActive(vars);
+		}catch(AssertionError error) {
+			assertionError = true;
+		}
+		assertFalse(assertionError);
+		assertionError = false;
+		try {
+			Set<Object> active = new HashSet<>();
+			active.add(var2);
+			ConstraintVerifier verifyActivation = new ConstraintVerifier(active, new HashSet<>(), new HashSet<>());
+			verifyActivation.verifyAtLeastOneActive(vars);
+		}catch(AssertionError error) {
+			assertionError = true;
+		}
+		assertFalse(assertionError);
+		assertionError = false;
+		try {
+			Set<Object> active = new HashSet<>();
+			active.add(var1);
+			active.add(var2);
+			ConstraintVerifier verifyActivation = new ConstraintVerifier(active, new HashSet<>(), new HashSet<>());
+			verifyActivation.verifyAtLeastOneActive(vars);
+		}catch(AssertionError error) {
+			assertionError = true;
+		}
+		assertFalse(assertionError);
+	}
+	
+	@Test
 	public void testVariableNotFixed() {
 		Object var = new Object();
 		Set<Constraint> constraints = new HashSet<>();
