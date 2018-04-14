@@ -1,0 +1,2 @@
+# constraintTester
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/d56beb4b45bd42b4ba0e5098a6d973b5)](https://app.codacy.com/app/FedorSmirnov89/constraintTester?utm_source=github.com&utm_medium=referral&utm_content=FedorSmirnov89/constraintTester&utm_campaign=badger)
