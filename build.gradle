@@ -22,7 +22,7 @@
   
   dependencies {
 	  compile group: 'junit', 		name: 'junit', 					version: '4.+'  
-	  compile 'com.github.felixreimann:opt4j:493dc6493f'
+	  compile 'com.github.felixreimann:opt4j:v3.2'
   }
   
   task wrapper(type: Wrapper) {

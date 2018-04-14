@@ -11,6 +11,28 @@ import org.opt4j.satdecoding.Constraint;
 public class ConstraintVerifierTest {
 
 	@Test
+	public void testActivationSingleVariables(){
+		Object var1 = new Object();
+		Object var2 = new Object();
+		ConstraintVerifier verifier = new ConstraintVerifier(new HashSet<>());
+		verifier.activateVariable(var1);
+		verifier.deactivateVariable(var2);
+		boolean assertionError = false;
+		try{
+			verifier.verifyVariableActivated(var1);
+		}catch(AssertionError error){
+			assertionError = true;
+		}
+		assertFalse(assertionError);
+		try{
+			verifier.verifyVariableDeactivated(var2);
+		}catch(AssertionError error){
+			assertionError = true;
+		}
+		assertFalse(assertionError);
+	}
+	
+	@Test
 	public void testVerifyAtLeastOneActive() {
 		Object var1 = new Object();
 		Object var2 = new Object();
