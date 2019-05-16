@@ -21,21 +21,33 @@ import static org.junit.Assert.*;
  */
 public class ConstraintVerifier {
 
-	// The constraint set contains the information about the initialization of the
-	// variables
+	// The constraint set under verification
 	protected final Set<Constraint> constraints;
 
 	/**
-	 * Initialize the constraint verification by creating a new ConstraintVerifier
-	 * object.
+	 * Initializes the constraint verification by creating a new
+	 * ConstraintVerifier object.
+	 * 
+	 * @param prevailingConstraints
+	 *            The set of constraints that describe the situation that is to
+	 *            be verified.
+	 * 
+	 */
+	public ConstraintVerifier(Set<Constraint> prevailingConstraints) {
+		this(new HashSet<>(), new HashSet<>(), prevailingConstraints);
+	}
+
+	/**
+	 * Initializes the constraint verification by creating a new
+	 * ConstraintVerifier object.
 	 * 
 	 * @param activatedVariables
 	 *            : The set of variables which are to be set to 1
 	 * @param deactivatedVariables
 	 *            : The set of variables which are to be set to 0
 	 * @param prevailingConstraints
-	 *            : The set of constraints that describe the situation that is to be
-	 *            verified.
+	 *            : The set of constraints that describe the situation that is
+	 *            to be verified.
 	 */
 	public ConstraintVerifier(Set<Object> activatedVariables, Set<Object> deactivatedVariables,
 			Set<Constraint> prevailingConstraints) {
@@ -50,12 +62,40 @@ public class ConstraintVerifier {
 	}
 
 	/**
-	 * Check whether the given constraint set is solvable.
+	 * Adds a {@link Constraint} setting the given variable to 1. Throws an
+	 * {@link AssertionError} if the new constraint leads to a contradiction
+	 * with the prevailing constraints.
+	 * 
+	 * @param variable
+	 *            the variable that is set to 1
+	 */
+	public void activateVariable(Object variable) {
+		this.constraints.add(ConstraintGeneration.activateVariable(variable));
+		assertTrue("Activating the variable" + variable.toString() + " leads to a contradiction",
+				areConstraintsSolvable(constraints));
+	}
+
+	/**
+	 * Adds a {@link Constraint} setting the given variable to 0. Throws an
+	 * {@link AssertionError} if the new constraint leads to a contradiction
+	 * with the prevailing constraints.
+	 * 
+	 * @param variable
+	 *            the variable that is set to 0
+	 */
+	public void deactivateVariable(Object variable) {
+		this.constraints.add(ConstraintGeneration.deactivateVariable(variable));
+		assertTrue("Deactivating the variable" + variable.toString() + " leads to a contradiction",
+				areConstraintsSolvable(constraints));
+	}
+
+	/**
+	 * Checks whether the given constraint set is solvable.
 	 * 
 	 * @param constraints
 	 * @return TRUE is solvable, FALSE otherwise
 	 */
-	protected boolean areConstraintsSolvable(Set<Constraint> constraints) {
+	public static boolean areConstraintsSolvable(Set<Constraint> constraints) {
 		Solver solver = new DefaultSolver();
 		for (Constraint c : constraints) {
 			solver.addConstraint(c);
@@ -109,9 +149,9 @@ public class ConstraintVerifier {
 	}
 
 	/**
-	 * Verifies that setting the given variable to the given value does not result
-	 * in a contradiction AND that setting it to the negated value causes a
-	 * contradiction.
+	 * Verifies that setting the given variable to the given value does not
+	 * result in a contradiction AND that setting it to the negated value causes
+	 * a contradiction.
 	 * 
 	 * @param variable
 	 *            : the variable to verify
@@ -124,8 +164,8 @@ public class ConstraintVerifier {
 	}
 
 	/**
-	 * Verifies that the input variables can be set to both 0 and 1 without causing
-	 * a contradiction under the current circumstances.
+	 * Verifies that the input variables can be set to both 0 and 1 without
+	 * causing a contradiction under the current circumstances.
 	 * 
 	 * @param variable
 	 *            the input variable
@@ -136,16 +176,16 @@ public class ConstraintVerifier {
 	}
 
 	/**
-	 * Check that setting the variable to the given value causes (or does not cause)
-	 * a contradiction in the constraint system under verification.
+	 * Check that setting the variable to the given value causes (or does not
+	 * cause) a contradiction in the constraint system under verification.
 	 * 
 	 * @param variable
 	 *            : the variable to check
 	 * @param active
 	 *            : TRUE => variable set to 1; FALSE => variable set to 0;
 	 * @param contradictionExpected
-	 *            : TRUE => contradiction has to occur; FALSE => contradiction must
-	 *            not occur
+	 *            : TRUE => contradiction has to occur; FALSE => contradiction
+	 *            must not occur
 	 */
 	protected void checkForContradiction(Object variable, boolean active, boolean contradictionExpected) {
 		Solver solver = new DefaultSolver();
