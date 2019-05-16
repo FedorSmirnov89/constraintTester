@@ -79,11 +79,13 @@ public class ConstraintVerifier {
 	 *            the set of the variables where at least one has to be active
 	 */
 	public void verifyAtLeastOneActive(Set<Object> variables) {
+		Set<Constraint> extendedConstraints = new HashSet<>(constraints);
 		for (Object var : variables) {
-			constraints.add(ConstraintGeneration.deactivateVariable(var));
+			extendedConstraints.add(ConstraintGeneration.deactivateVariable(var));
 		}
-		String message = "The constraints are solvable although all the variables " + variables.toString() + "are deactivated, the constraint set remains solvable.";
-		assertFalse(message, areConstraintsSolvable(constraints));
+		String message = "The constraints are solvable although all the variables " + variables.toString()
+				+ "are deactivated, the constraint set remains solvable.";
+		assertFalse(message, areConstraintsSolvable(extendedConstraints));
 	}
 
 	/**
