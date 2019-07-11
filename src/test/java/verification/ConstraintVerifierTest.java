@@ -21,8 +21,20 @@ public class ConstraintVerifierTest {
 		Set<Constraint> cs = new HashSet<>();
 		cs.add(constraintMock);
 		ConstraintVerifier verifier = new ConstraintVerifier(cs);
-		assertTrue(verifier.isVariableEncoded(var1));
-		assertFalse(verifier.isVariableEncoded(var2));
+		boolean assertionError = false;
+		try {
+			verifier.verifyVaribleNotEncoded(var1);
+		} catch (AssertionError e) {
+			assertionError = true;
+		}
+		assertTrue(assertionError);
+		assertionError = false;
+		try {
+			verifier.verifyVaribleNotEncoded(var2);
+		} catch (AssertionError e) {
+			assertionError = true;
+		}
+		assertFalse(assertionError);
 	}
 
 	@Test

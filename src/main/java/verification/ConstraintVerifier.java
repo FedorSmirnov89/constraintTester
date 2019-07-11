@@ -63,22 +63,21 @@ public class ConstraintVerifier {
 	}
 
 	/**
-	 * Returns {@code true} iff at least one of the prevailing constraints contains
-	 * the given variable.
+	 * Checks that the given variable is not encoded in the prevailing constraint
+	 * set. Throws an {@link AssertionError} otherwise.
 	 * 
 	 * @param variable
 	 *            the given encoding variable (the object, not the literal)
-	 * @return {@code true} iff at least one of the prevailing constraints contains
-	 *         the given variable
 	 */
-	public boolean isVariableEncoded(Object variable) {
+	public void verifyVaribleNotEncoded(Object variable) {
 		Literal pos = new Literal(variable, true);
 		Literal neg = new Literal(variable, false);
-		boolean found = false;
 		for (Constraint c : constraints) {
-			found |= (c.contains(pos) || c.contains(neg));
+			if (c.contains(pos) || c.contains(neg)) {
+				throw new AssertionError(
+						"The variable " + variable.toString() + " is contained in the constraint " + c.toString());
+			}
 		}
-		return found;
 	}
 
 	/**
