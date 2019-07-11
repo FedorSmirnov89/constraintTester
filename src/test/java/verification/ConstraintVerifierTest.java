@@ -7,31 +7,46 @@ import java.util.Set;
 
 import org.junit.Test;
 import org.opt4j.satdecoding.Constraint;
+import org.opt4j.satdecoding.Constraint.Operator;
+import org.opt4j.satdecoding.Literal;
 
 public class ConstraintVerifierTest {
 
 	@Test
-	public void testActivationSingleVariables(){
+	public void testIsEncoded() {
+		Constraint constraintMock = new Constraint(Operator.EQ, 1);
+		Object var1 = new Object();
+		Object var2 = new Object();
+		constraintMock.add(new Literal(var1, true));
+		Set<Constraint> cs = new HashSet<>();
+		cs.add(constraintMock);
+		ConstraintVerifier verifier = new ConstraintVerifier(cs);
+		assertTrue(verifier.isVariableEncoded(var1));
+		assertFalse(verifier.isVariableEncoded(var2));
+	}
+
+	@Test
+	public void testActivationSingleVariables() {
 		Object var1 = new Object();
 		Object var2 = new Object();
 		ConstraintVerifier verifier = new ConstraintVerifier(new HashSet<>());
 		verifier.activateVariable(var1);
 		verifier.deactivateVariable(var2);
 		boolean assertionError = false;
-		try{
+		try {
 			verifier.verifyVariableActivated(var1);
-		}catch(AssertionError error){
+		} catch (AssertionError error) {
 			assertionError = true;
 		}
 		assertFalse(assertionError);
-		try{
+		try {
 			verifier.verifyVariableDeactivated(var2);
-		}catch(AssertionError error){
+		} catch (AssertionError error) {
 			assertionError = true;
 		}
 		assertFalse(assertionError);
 	}
-	
+
 	@Test
 	public void testVerifyAtLeastOneActive() {
 		Object var1 = new Object();
@@ -41,9 +56,10 @@ public class ConstraintVerifierTest {
 		vars.add(var2);
 		boolean assertionError = false;
 		try {
-			ConstraintVerifier verifyActivation = new ConstraintVerifier(new HashSet<>(), new HashSet<>(), new HashSet<>());
+			ConstraintVerifier verifyActivation = new ConstraintVerifier(new HashSet<>(), new HashSet<>(),
+					new HashSet<>());
 			verifyActivation.verifyAtLeastOneActive(vars);
-		}catch(AssertionError error) {
+		} catch (AssertionError error) {
 			assertionError = true;
 		}
 		assertTrue(assertionError);
@@ -53,7 +69,7 @@ public class ConstraintVerifierTest {
 			active.add(var1);
 			ConstraintVerifier verifyActivation = new ConstraintVerifier(active, new HashSet<>(), new HashSet<>());
 			verifyActivation.verifyAtLeastOneActive(vars);
-		}catch(AssertionError error) {
+		} catch (AssertionError error) {
 			assertionError = true;
 		}
 		assertFalse(assertionError);
@@ -63,7 +79,7 @@ public class ConstraintVerifierTest {
 			active.add(var2);
 			ConstraintVerifier verifyActivation = new ConstraintVerifier(active, new HashSet<>(), new HashSet<>());
 			verifyActivation.verifyAtLeastOneActive(vars);
-		}catch(AssertionError error) {
+		} catch (AssertionError error) {
 			assertionError = true;
 		}
 		assertFalse(assertionError);
@@ -74,12 +90,12 @@ public class ConstraintVerifierTest {
 			active.add(var2);
 			ConstraintVerifier verifyActivation = new ConstraintVerifier(active, new HashSet<>(), new HashSet<>());
 			verifyActivation.verifyAtLeastOneActive(vars);
-		}catch(AssertionError error) {
+		} catch (AssertionError error) {
 			assertionError = true;
 		}
 		assertFalse(assertionError);
 	}
-	
+
 	@Test
 	public void testVariableNotFixed() {
 		Object var = new Object();
